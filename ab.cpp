@@ -44,8 +44,13 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <bitset>
+#include <cmath>
 
 using namespace std;
+
+// Runtime compile parameters
+const int bitlength = 50; // Max length of string as stated in problem definition
 
 // Our mission: Create the AB class
 
@@ -60,6 +65,8 @@ public:
 	// Member Function declarations
 	double countAB(void);
 	void setString(string input);
+	string createString(int N, int K);
+	string makeAB(int N);
 
 
 	// string createString(int N, int K){
@@ -70,6 +77,39 @@ public:
 };
 
 // Member Function Definitions
+
+string AB::makeAB(int num){
+	// Accept a digit and make the corresponding binary AB string
+	// Writes this string into 
+	bitset<bitlength> b1(num);
+	string result =  b1.to_string('A','B');
+	AB::setString(result);
+	return result;
+}
+
+string AB::createString(int N, int K){
+	// Routine to generate AB strings within parameters N and K, test them, and report any successful ones as output
+	string string_found; // Create a blank string, which we output if we are not successful
+	string string_try; // Blank string we try to search with
+	int maxiter = pow(2,N); // Max number of iterations
+	int count_AB;
+
+	for (int i=1; i <= maxiter, i++;){
+		
+		string_try = AB::makeAB(i);
+		// Now count the the AB pair in this string and compare
+		AB::setString(string_try);
+		count_AB = AB::countAB();
+		if(count_AB == K){
+			string_found = string_try;
+			cout << "Found one " << string_found << endl;
+			AB::setString(string_found);
+			return string_found;
+			break;
+		}
+	}
+
+}
 void AB::setString(string input){
 	txt = input;
 	// length = strlen(input);
@@ -78,7 +118,7 @@ void AB::setString(string input){
 
 double AB::countAB(void){
 	// This function will count the AB pairs in a given string
-	cout << "We opened the function \n";
+	// cout << "We opened the function \n";
 	int count = 0; // Initialize counter
 	for(int i=0; i<length-1;i++){
 		// Start search for A at i = 0, iterative through string
@@ -101,16 +141,33 @@ double AB::countAB(void){
 
 int main()
 {
-	cout << "We will try to do a AB count \n\n";
-	AB astring; // create special string object
+	cout << "We will do an AB count \n\n";
+
+	// Inputs to our activities
 	string string1 = "ABB"; // set our string value
 	// string string1 = "BAABBABAAB";
 	// int len1 = string1.length(); // calculate the length
+
+	// Work with our AB object
+	AB astring; // create special string object
 	astring.setString(string1);
 	// Try to count a length on AB String
 	astring.countAB();
 
-	// Try to retrieve the count value
+	// Retrieve the count value
 	cout << "Counted size is " << astring.numAB << endl;
+
+	// Create a string 
+	// recreate ABB. N=3, K=2
+	astring.makeAB(617);
+	// note we will always get a 50 digit number. Slice the number, and replace the value
+	cout << astring.txt.substr(40,10);
+	astring.setString(astring.txt.substr(40,10));
+	astring.countAB();
+	cout << "String is " << astring.txt << endl;
+	cout << "Counted size is " << astring.numAB << endl;
+	// Now let's try to generate a string inside the class
+	// astring.createString(3,2);
+	
 
 }
